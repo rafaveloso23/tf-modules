@@ -1,8 +1,3 @@
-variable "environment" {
-    type = string
-    default = null
-}
-
 variable "rg_name" {
   description = "Indicates whether to create a new resource group"
   type        = string

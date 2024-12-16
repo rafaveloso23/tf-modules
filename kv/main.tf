@@ -1,22 +1,3 @@
-# Create a new resource group if rg_novo is true
-resource "azurerm_resource_group" "rg_hub" {
-  for_each = var.rg_novo ? { "new" = "${var.rg_name}-${var.environment}" } : {}
-  name     = each.value
-  location = var.rg_location
-}
-
-# Reference an existing resource group if rg_existente is true
-data "azurerm_resource_group" "rg_data" {
-  for_each = var.rg_existente ? { "existing" = "${var.rg_name}-${var.environment}" } : {}
-  name     = each.value
-}
-
-# Determine the resource group name and location dynamically
-locals {
-  resource_group_name = var.rg_novo ? azurerm_resource_group.rg_hub["new"].name : data.azurerm_resource_group.rg_data["existing"].name
-  resource_group_location = var.rg_novo ? azurerm_resource_group.rg_hub["new"].location : data.azurerm_resource_group.rg_data["existing"].location
-}
-
 # Use the determined resource group for dependent resources
 resource "azurerm_key_vault" "kv" {
   name                        = "kvactions-${var.environment}"
