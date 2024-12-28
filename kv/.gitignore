@@ -33,3 +33,5 @@ override.tf.json
 
 # Lock files for Terraform
 terraform.lock.hcl
+providers.tf
+values.tfvars
