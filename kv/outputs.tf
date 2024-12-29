@@ -12,3 +12,18 @@ output "key_vault_location" {
   description = "The location of the Key Vault."
   value       = var.kv_novo ? azurerm_key_vault.kv["new"].location : data.azurerm_key_vault.kv["existing"].location
 }
+
+output "key_vault_access_policies" {
+  description = "The access policies configured for the Key Vault."
+  value       = var.access_policies != null ? var.access_policies : {}
+}
+
+output "new_secrets" {
+  description = "List of newly created secrets and their details."
+  value       = { for k, v in azurerm_key_vault_secret.new : k => v.id if var.kv_secret_new }
+}
+
+output "existing_secrets" {
+  description = "Values of fetched secrets from the existing Key Vault."
+  value       = { for k, v in data.azurerm_key_vault_secret.existing : k => v.value if var.kv_secret_get }
+}
