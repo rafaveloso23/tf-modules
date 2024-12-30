@@ -3,6 +3,8 @@ data "azurerm_key_vault" "acces_policy" {
   resource_group_name = var.rg_name
 }
 
+data "azurerm_client_config" "current" {}
+
 output "acces_policy" {
   value = data.azurerm_key_vault.acces_policy.access_policy
 }
