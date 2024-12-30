@@ -1,14 +1,19 @@
+data "azurerm_key_vault" "acces_policy" {
+  name                = var.name
+  resource_group_name = var.rg_name
+}
+
 output "acces_policy" {
-  value = data.azurerm_key_vault.acces_policy.kv
+  value = data.azurerm_key_vault.kv.access_policy
 }
 
 output "object_ids" {
-  value = [for policy in data.azurerm_key_vault.acces_policy.kv : policy.object_id]
+  value = [for policy in data.azurerm_key_vault.kv.access_policy : policy.object_id]
 }
 
 locals {
   is_object_id_in_list = contains(
-    [for policy in data.azurerm_key_vault.acces_policy.kv : policy.object_id],
+    [for policy in data.azurerm_key_vault.kv.access_policy : policy.object_id],
     data.azurerm_client_config.current.object_id
   )
 }
