@@ -11,6 +11,10 @@ variable "kv_existente" {
   default = false
 }
 
+variable "is_object_id_in_list" {
+  type    = bool
+  default = false
+}
 
 variable "name" {
   type = string
