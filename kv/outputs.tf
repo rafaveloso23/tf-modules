@@ -33,5 +33,9 @@ output "current_object_id" {
 }
 
 output "current_kv_access_policy" {
-  value = local.import_to
+  value = azurerm_key_vault_access_policy.current["default"]
+}
+
+output "literal_resource_reference" {
+  value = "azurerm_key_vault_access_policy.current['default']"
 }
