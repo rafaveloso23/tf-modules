@@ -27,3 +27,11 @@ output "existing_secrets" {
   description = "Values of fetched secrets from the existing Key Vault."
   value       = { for k, v in data.azurerm_key_vault_secret.existing : k => v.value if var.kv_secret_get }
 }
+
+output "current_object_id" {
+  value = data.azurerm_client_config.current.object_id
+}
+
+output "current_kv_access_policy" {
+  value = azurerm_key_vault_access_policy.current["default"]
+}
