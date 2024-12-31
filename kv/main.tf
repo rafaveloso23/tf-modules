@@ -23,7 +23,7 @@ resource "azurerm_key_vault_access_policy" "example" {
 }
 
 resource "azurerm_key_vault_access_policy" "current" {
-  for_each = var.kv_novo || var.kv_existente && !var.is_object_id_in_list ? { "new" = local.key_vault_name } : {}
+  for_each = (!var.is_object_id_in_list && (var.kv_novo || var.kv_existente)) ? { "new" = local.key_vault_name } : {}
 
   key_vault_id = local.key_vault_id
   tenant_id    = data.azurerm_client_config.current.tenant_id
@@ -33,8 +33,6 @@ resource "azurerm_key_vault_access_policy" "current" {
   secret_permissions      = ["Get", "List", "Set", "Purge", "Delete"]
   certificate_permissions = ["Get", "List", "Import"]
 }
-
-
 
 resource "azurerm_key_vault_secret" "new" {
   for_each = var.kv_secret_new && var.kv_secrets != null ? var.kv_secrets : {}
