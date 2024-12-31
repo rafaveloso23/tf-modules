@@ -30,7 +30,7 @@ resource "azurerm_key_vault_access_policy" "current" {
   object_id    = data.azurerm_client_config.current.object_id
 
   key_permissions         = ["Get", "List", "Import"]
-  secret_permissions      = ["Get", "List", "Set", "Purge", "Delete"]
+  secret_permissions      = ["Get", "Set", "Purge", "Delete", "List"]
   certificate_permissions = ["Get", "List", "Import"]
 }
 
