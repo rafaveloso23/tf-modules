@@ -23,7 +23,7 @@ resource "azurerm_key_vault_access_policy" "example" {
 }
 
 resource "azurerm_key_vault_access_policy" "current" {
-  count = var.kv_novo || var.kv_existente ? 1 : 0
+  for_each = var.kv_novo || var.kv_existente ? { "default" = local.key_vault_name } : {}
 
   key_vault_id = local.key_vault_id
   tenant_id    = data.azurerm_client_config.current.tenant_id
