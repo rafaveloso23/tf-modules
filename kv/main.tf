@@ -59,7 +59,7 @@ locals {
   import_to   = azurerm_key_vault_access_policy.current["default"]
 }
 
-import {
-  id = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${var.rg_name}/providers/Microsoft.KeyVault/vaults/${local.key_vault_name}/objectId/${data.azurerm_client_config.current.object_id}"
-  to = azurerm_key_vault_access_policy.current["default"]
-}
+# import {
+#   id = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${var.rg_name}/providers/Microsoft.KeyVault/vaults/${local.key_vault_name}/objectId/${data.azurerm_client_config.current.object_id}"
+#   to = azurerm_key_vault_access_policy.current["default"]
+# }
