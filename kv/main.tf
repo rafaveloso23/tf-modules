@@ -23,7 +23,7 @@ resource "azurerm_key_vault_access_policy" "example" {
 }
 
 resource "azurerm_key_vault_access_policy" "current" {
-  for_each = (!local.is_object_id_in_list && var.kv_existente) ? { "new" = local.key_vault_name } : {}
+  for_each = var.kv_novo || var.kv_existente ? { for key in [local.key_vault_name] : key => key } : {}
 
   key_vault_id = local.key_vault_id
   tenant_id    = data.azurerm_client_config.current.tenant_id
@@ -52,4 +52,9 @@ data "azurerm_key_vault_secret" "existing" {
   key_vault_id = local.key_vault_id
 
   depends_on = [ azurerm_key_vault_access_policy.example ]
+}
+
+import {
+  id = "/subscriptions/${data.azurerm_client_config.current.subscription_id}/resourceGroups/${var.rg_name}/providers/Microsoft.KeyVault/vaults/${local.key_vault_name}/objectId/${data.azurerm_client_config.current.object_id}"
+  to = azurerm_key_vault_access_policy.current["kvrvstfsd"]
 }
