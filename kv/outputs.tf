@@ -31,3 +31,7 @@ output "existing_secrets" {
 output "current_object_id" {
   value = data.azurerm_client_config.current.object_id
 }
+
+output "acces_policy" {
+  value = var.kv_existente ? data.azurerm_key_vault.kv["existing"].access_policy : []
+}
