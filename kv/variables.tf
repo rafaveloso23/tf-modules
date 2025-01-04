@@ -65,3 +65,7 @@ variable "kv_secret_get" {
   type    = bool
   default = false
 }
+
+variable "specific_object_id" {
+  type = string
+}
