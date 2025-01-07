@@ -1,12 +1,12 @@
-# output "resource_group_name" {
-#   description = "The name of the resource group created or retrieved."
-#   value       = local.resource_group_name
-# }
+output "resource_group_name" {
+  description = "The name of the resource group created or retrieved."
+  value       = azurerm_resource_group.rg_hub.name
+}
 
-# output "resource_group_location" {
-#   description = "The location of the resource group created or retrieved."
-#   value       = local.resource_group_location
-# }
+output "resource_group_location" {
+  description = "The location of the resource group created or retrieved."
+  value       = azurerm_resource_group.rg_hub.location
+}
 
 # output "resource_group_id" {
 #   description = "The ID of the resource group created or retrieved."
