@@ -1,0 +1,37 @@
+# Terraform state files
+terraform.tfstate
+terraform.tfstate.backup
+backend.tf
+
+# Crash logs
+crash.log
+
+# Terraform variable files
+*.tfvars
+*.tfvars.json
+
+# Override files (used for local configurations)
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Terraform plan files
+*.tfplan
+
+# Module directory (when using terraform get)
+.terraform/
+.terraform.lock.hcl
+
+# Sensitive credentials or secrets
+*.pem
+*.key
+*.crt
+# Logs and temp files
+*.log
+*.tmp
+
+# Lock files for Terraform
+terraform.lock.hcl
+providers.tf
+values.tfvars

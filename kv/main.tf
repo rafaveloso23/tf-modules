@@ -22,16 +22,17 @@ resource "azurerm_key_vault_access_policy" "example" {
   depends_on = [azurerm_key_vault_access_policy.current]
 }
 
-resource "azurerm_key_vault_access_policy" "current" {
+# resource "azurerm_key_vault_access_policy" "current" {
+#   for_each = var.kv_novo || var.kv_existente ? { "default" = local.key_vault_name } : {}
 
-  key_vault_id = azurerm_key_vault.kv.id
-  tenant_id    = data.azurerm_client_config.current.tenant_id
-  object_id    = var.specific_object_id
+#   key_vault_id = azurerm_key_vault.kv.id
+#   tenant_id    = data.azurerm_client_config.current.tenant_id
+#   object_id    = var.specific_object_id
 
-  key_permissions         = ["Get", "List", "Import"]
-  secret_permissions      = ["Get", "Set", "Purge", "Delete", "List"]
-  certificate_permissions = ["Get", "List", "Import"]
-}
+#   key_permissions         = ["Get", "List", "Import"]
+#   secret_permissions      = ["Get", "Set", "Purge", "Delete", "List"]
+#   certificate_permissions = ["Get", "List", "Import"]
+# }
 
 
 # resource "azurerm_key_vault_secret" "new" {
