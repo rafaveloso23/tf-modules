@@ -12,6 +12,7 @@ resource "azurerm_key_vault_access_policy" "example" {
 }
 
 resource "azurerm_key_vault_access_policy" "current" {
+  for_each = { "default" = var.specific_object_id }
 
   key_vault_id = var.key_vault_id
   tenant_id    = data.azurerm_client_config.current.tenant_id
