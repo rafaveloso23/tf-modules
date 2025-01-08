@@ -1,15 +1,15 @@
-variable "kv_novo" {
-  type = bool
-  validation {
-    condition     = !(var.kv_novo && var.kv_existente)
-    error_message = "You cannot set both 'kv_novo' and 'kv_existente' to true at the same time."
-  }
-}
+# variable "kv_novo" {
+#   type = bool
+#   validation {
+#     condition     = !(var.kv_novo && var.kv_existente)
+#     error_message = "You cannot set both 'kv_novo' and 'kv_existente' to true at the same time."
+#   }
+# }
 
-variable "kv_existente" {
-  type    = bool
-  default = false
-}
+# variable "kv_existente" {
+#   type    = bool
+#   default = false
+# }
 
 variable "name" {
   type = string
@@ -39,11 +39,16 @@ variable "sku_name" {
   default = null
 }
 
+# variable "key_vault_id" {
+#   type    = string
+# }
+
 variable "access_policies" {
   type = map(object({
     object_id          = string
     key_permissions    = list(string)
     secret_permissions = list(string)
+    certificate_permissions = list(string)
   }))
   default = {}
 }
@@ -58,12 +63,12 @@ variable "kv_secrets" {
 
 variable "kv_secret_new" {
   type    = bool
-  default = false
+  default = null
 }
 
 variable "kv_secret_get" {
   type    = bool
-  default = false
+  default = null
 }
 
 variable "specific_object_id" {
