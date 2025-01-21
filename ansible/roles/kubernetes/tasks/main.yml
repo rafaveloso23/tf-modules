@@ -1,0 +1,2 @@
+- include_tasks: create_namespace.yml
+- include_tasks: create_secret.yml

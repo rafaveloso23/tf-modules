@@ -1,0 +1,9 @@
+- name: Ensure Kubernetes namespace exists
+  kubernetes.core.k8s:
+    kubeconfig: "~/.kube/config"
+    state: present
+    definition:
+      apiVersion: v1
+      kind: Namespace
+      metadata:
+        name: "{{ namespace_name }}"

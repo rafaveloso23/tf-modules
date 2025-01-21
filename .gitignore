@@ -1,2 +1,11 @@
 rg/.terraform.tfstate.lock.info
 kv/.terraform.tfstate.lock.info
+aks-simples/.terraform.tfstate.lock.info
+aks-simples/.terraform*
+teste-data/.terraform*
+aks-simples/terraform.tfstate*
+teste-data/.terraform.tfstate.lock.info
+teste-data/terraform.tfstate*
+ansible/ansible-env/*
+ansible/roles/kubernetes/vars/main.yml
+readme.md

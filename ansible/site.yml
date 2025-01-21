@@ -1,0 +1,5 @@
+- name: Manage Kubernetes Cluster
+  hosts: localhost
+  gather_facts: yes
+  roles:
+    - kubernetes
