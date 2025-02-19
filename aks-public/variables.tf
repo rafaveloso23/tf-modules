@@ -4,8 +4,7 @@ variable "internet_access" {
 }
 
 variable "cluster_name" {
-  type    = bool
-  default = false
+  type    = string
 }
 
 locals {

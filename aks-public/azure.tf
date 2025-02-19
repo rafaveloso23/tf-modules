@@ -11,7 +11,7 @@ resource "azurerm_container_registry" "example" {
 }
 
 resource "azurerm_kubernetes_cluster" "example" {
-  name                = "pub-aks-rvs"
+  name                = var.cluster_name
   location            = azurerm_resource_group.example.location
   azure_policy_enabled = true
   resource_group_name = azurerm_resource_group.example.name
