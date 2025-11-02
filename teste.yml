@@ -1,0 +1,175 @@
+apiVersion: scaffolder.backstage.io/v1beta3
+kind: Template
+metadata:
+  name: iac-repository-template
+  title: IaC Repository Template
+  description: Crie um repositório com templates de Terraform ou Ansible
+  tags:
+    - infrastructure
+    - terraform
+    - ansible
+    - iac
+spec:
+  owner: platform-team
+  type: service
+  
+  parameters:
+    - title: Informações do Repositório
+      required:
+        - name
+        - type
+        - owner
+      properties:
+        name:
+          title: Nome do Repositório
+          type: string
+          description: Nome base do seu repositório (será concatenado com o tipo)
+          ui:autofocus: true
+          pattern: '^[a-z0-9-]+$'
+          maxLength: 50
+        
+        type:
+          title: Tipo de IaC
+          type: string
+          description: Escolha a ferramenta de Infrastructure as Code
+          enum:
+            - terraform
+            - ansible
+          enumNames:
+            - 'Terraform'
+            - 'Ansible'
+          default: terraform
+        
+        owner:
+          title: Owner
+          type: string
+          description: Time ou usuário responsável pelo repositório
+          ui:field: OwnerPicker
+          ui:options:
+            catalogFilter:
+              kind: 
+                - Group
+                - User
+        
+        description:
+          title: Descrição
+          type: string
+          description: Descrição breve do propósito deste repositório
+          default: 'Repositório de infraestrutura gerenciado via IaC'
+    
+    - title: Configurações Adicionais
+      properties:
+        visibility:
+          title: Visibilidade do Repositório
+          type: string
+          description: Define se o repositório será público ou privado
+          enum:
+            - private
+            - public
+          enumNames:
+            - 'Privado'
+            - 'Público'
+          default: private
+        
+        defaultBranch:
+          title: Branch Padrão
+          type: string
+          description: Nome da branch principal
+          default: main
+          enum:
+            - main
+            - master
+
+  steps:
+    # Step 1: Buscar template base (README, .gitignore, workflows)
+    - id: fetch-base
+      name: Fetch Base Template
+      action: fetch:template
+      input:
+        url: ./skeleton/base
+        copyWithoutTemplating:
+          - .github/workflows/**
+        values:
+          name: ${{ parameters.name }}
+          type: ${{ parameters.type }}
+          owner: ${{ parameters.owner }}
+          description: ${{ parameters.description }}
+          repoName: ${{ parameters.name }}-${{ parameters.type }}
+
+    # Step 2: Buscar template específico de Terraform (condicional)
+    - id: fetch-terraform
+      name: Fetch Terraform Template
+      if: ${{ parameters.type === 'terraform' }}
+      action: fetch:template
+      input:
+        url: ./skeleton/terraform
+        targetPath: ./terraform
+        values:
+          name: ${{ parameters.name }}
+          owner: ${{ parameters.owner }}
+          description: ${{ parameters.description }}
+
+    # Step 3: Buscar template específico de Ansible (condicional)
+    - id: fetch-ansible
+      name: Fetch Ansible Template
+      if: ${{ parameters.type === 'ansible' }}
+      action: fetch:template
+      input:
+        url: ./skeleton/ansible
+        targetPath: ./ansible
+        values:
+          name: ${{ parameters.name }}
+          owner: ${{ parameters.owner }}
+          description: ${{ parameters.description }}
+
+    # Step 4: Criar catalog-info.yaml
+    - id: fetch-catalog-info
+      name: Create Catalog Info
+      action: fetch:template
+      input:
+        url: ./skeleton/catalog
+        values:
+          name: ${{ parameters.name }}-${{ parameters.type }}
+          description: ${{ parameters.description }}
+          owner: ${{ parameters.owner }}
+          type: ${{ parameters.type }}
+          repoUrl: github.com?owner=${{ (parameters.owner | parseEntityRef).name }}&repo=${{ parameters.name }}-${{ parameters.type }}
+
+    # Step 5: Publicar no GitHub
+    - id: publish
+      name: Publish to GitHub
+      action: publish:github
+      input:
+        allowedHosts:
+          - github.com
+        description: ${{ parameters.description }}
+        repoUrl: github.com?owner=${{ (parameters.owner | parseEntityRef).name }}&repo=${{ parameters.name }}-${{ parameters.type }}
+        repoVisibility: ${{ parameters.visibility }}
+        defaultBranch: ${{ parameters.defaultBranch }}
+        deleteBranchOnMerge: true
+        gitCommitMessage: 'Initial commit from Backstage template'
+        gitAuthorName: 'Backstage'
+        gitAuthorEmail: 'backstage@example.com'
+
+    # Step 6: Registrar no catálogo do Backstage
+    - id: register
+      name: Register in Backstage Catalog
+      action: catalog:register
+      input:
+        repoContentsUrl: ${{ steps.publish.output.repoContentsUrl }}
+        catalogInfoPath: '/catalog-info.yaml'
+
+  output:
+    links:
+      - title: Repository
+        url: ${{ steps.publish.output.remoteUrl }}
+        icon: github
+      - title: Open in Backstage Catalog
+        icon: catalog
+        entityRef: ${{ steps.register.output.entityRef }}
+    
+    text:
+      - title: Repository Name
+        content: ${{ parameters.name }}-${{ parameters.type }}
+      - title: Repository URL
+        content: ${{ steps.publish.output.remoteUrl }}
